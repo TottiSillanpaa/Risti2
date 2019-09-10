@@ -1,0 +1,49 @@
+body {
+  font-family: sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+td {
+  table-layout: fixed;
+  width: 60px;
+  height: 60px;
+  border: 1px solid black;
+  text-align: center;
+  font: 30px helvetica;
+}
+
+.wrapper {
+  text-align: center;
+  margin: 10px;
+}
+
+.head {
+  text-align: center;
+}
+
+.bar {
+  margin: 5px auto;
+  border: solid 2px black;
+  height: 15px;
+  width: 50%;
+}
+
+.progress {
+  height: 15px;
+  background-color: green;
+  width: 0%;
+}
+
+#time {
+  text-align: center;
+}
+
+#X {
+  background: rgb(124, 252, 0);
+}
+#O {
+  background: rgb(250, 128, 114);
+}

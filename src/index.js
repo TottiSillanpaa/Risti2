@@ -19,19 +19,21 @@ function makeNewRow(rowId) {
   let newRow = document.createElement("tr");
   newRow.id = rowId;
   gameBoard.appendChild(newRow);
-  for (let index = 1; index < 6; index++) {
+  for (let index = 0; index < 5; index++) {
     let newCell = document.createElement("td");
-    newCell.id = "." + String(index);
+    newCell.id = rowId + String(index);
     document.getElementById(rowId).appendChild(newCell);
   }
 }
 
 function listener(ev) {
   let newCell = ev.target;
+  let cellRow = String(newCell.id)[0];
+  let cellColumn = String(newCell.id)[1];
+
   if (newCell.innerHTML === "" && gameWon === false) {
     newCell.innerHTML = currentPlayer;
-
-    var boo = checkWinner();
+    var boo = checkWinner(cellRow, cellColumn);
     if (boo) {
       gameWon = true;
       alert("Player " + (currentPlayer === "X" ? "1" : "2") + " won!");
@@ -39,9 +41,9 @@ function listener(ev) {
 
     /* Vaihdetaan klikatun solun tausta halutun värikseksi */
     if (currentPlayer === "X") {
-      newCell.id = "X";
+      newCell.style.backgroundColor = "rgb(124, 252, 0)";
     } else {
-      newCell.id = "O";
+      newCell.style.backgroundColor = "rgb(250, 128, 114)";
     }
     chancePlayer();
     clearInterval(tt);
@@ -55,8 +57,7 @@ function listener(ev) {
 }
 
 function startTimer(display) {
-  var seconds = 9;
-
+  var seconds = 10;
   tt = setInterval(function() {
     var timeString = seconds < 10 ? "0" + seconds : seconds;
 
@@ -68,38 +69,60 @@ function startTimer(display) {
   }, 1000);
 }
 
-function checkWinner() {
+function checkWinner(cellRow, cellColumn) {
   /* Tarkistetaan kaikki vaakasuora kombinaaiot*/
-
+  var countX = 0;
+  var countO = 0;
   for (let i = 0; i < 5; i++) {
-    let row = document.getElementById(i).getElementsByTagName("td");
-    var countX = 0;
-    var countO = 0;
-    for (let index = 0; index < row.length; index++) {
-      if (row[index].innerHTML === "") {
-        break;
-      }
-      if (row[index].innerHTML === "X") {
-        countX++;
-      } else {
-        countO++;
-      }
-      if (countX && countO >= 1) {
-        break;
-      }
-      if (countX === 5 || countO === 5) {
-        return true;
-      }
+    let cellId = cellRow + String(i);
+    let cell = document.getElementById(cellId);
+    if (cell.innerHTML === "") {
+      break;
+    }
+    if (cell.innerHTML === "X") {
+      countX++;
+    } else {
+      countO++;
+    }
+    if (countX && countO >= 1) {
+      break;
+    }
+    if (countX === 5 || countO === 5) {
+      return true;
+    }
+  }
+  /* Tarkistetaan pystysuoran kaikki kombinaatiot*/
+
+  countX = 0;
+  countO = 0;
+  for (let i = 0; i < 5; i++) {
+    let cellId = String(i) + cellColumn;
+    let cell = document.getElementById(cellId);
+    if (cell.innerHTML === "") {
+      break;
+    }
+    if (cell.innerHTML === "X") {
+      countX++;
+    } else {
+      countO++;
+    }
+    if (countX && countO >= 1) {
+      break;
+    }
+    if (countX === 5 || countO === 5) {
+      return true;
     }
   }
 
-  /* Tarkistetaan pystysuoran kaikki kombinaatiot*/
+  /* Diagonaali vasemmalta yläkulmasta oikeaan alakulmaan */
 
-  for (let i = 0; i < 5; i++) {
-    countX = 0;
-    countO = 0;
+  countX = 0;
+  countO = 0;
+  if (cellRow === cellColumn) {
     for (let index = 0; index < 5; index++) {
-      let cell = document.getElementById(index).getElementsByTagName("td")[i];
+      let cell = document.getElementById(index).getElementsByTagName("td")[
+        index
+      ];
       if (cell.innerHTML === "") {
         break;
       }
@@ -117,52 +140,32 @@ function checkWinner() {
     }
   }
 
-  /* Diagonaali vasemmalta yläkulmasta oikeaan alakulmaan */
-
-  countX = 0;
-  countO = 0;
-  for (let index = 0; index < 5; index++) {
-    let cell = document.getElementById(index).getElementsByTagName("td")[index];
-    if (cell.innerHTML === "") {
-      break;
-    }
-    if (cell.innerHTML === "X") {
-      countX++;
-    } else {
-      countO++;
-    }
-    if (countX && countO >= 1) {
-      break;
-    }
-    if (countX === 5 || countO === 5) {
-      return true;
-    }
-  }
-
   /* Diagonaali oikealta yläkulmasta oikeaan vasempaan */
 
   countX = 0;
   countO = 0;
-  for (let index = 0; index < 5; index++) {
-    let cell = document.getElementById(index).getElementsByTagName("td")[
-      4 - index
-    ];
-    if (cell.innerHTML === "") {
-      break;
+  if (parseInt(cellRow, 10) + parseInt(cellColumn, 10) === 4) {
+    for (let index = 0; index < 5; index++) {
+      let cell = document.getElementById(index).getElementsByTagName("td")[
+        4 - index
+      ];
+      if (cell.innerHTML === "") {
+        break;
+      }
+      if (cell.innerHTML === "X") {
+        countX++;
+      } else {
+        countO++;
+      }
+      if (countX && countO >= 1) {
+        break;
+      }
+      if (countX === 5 || countO === 5) {
+        return true;
+      }
     }
-    if (cell.innerHTML === "X") {
-      countX++;
-    } else {
-      countO++;
-    }
-    if (countX && countO >= 1) {
-      break;
-    }
-    if (countX === 5 || countO === 5) {
-      return true;
-    }
+    return false;
   }
-  return false;
 }
 
 function newGameButton() {
@@ -172,7 +175,7 @@ function newGameButton() {
   let cells = gameBoard.getElementsByTagName("td");
   for (let i = 0; i < cells.length; i++) {
     cells[i].innerHTML = "";
-    cells[i].id = undefined;
+    cells[i].style.backgroundColor = "white";
   }
   currentPlayer = "X";
   document.getElementById("progress").style.width = 0;

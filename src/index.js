@@ -12,6 +12,7 @@ function fillBoard() {
   makeNewRow("3");
   makeNewRow("4");
   startTimer();
+  gameBoard.addEventListener("click", listener);
 }
 
 function makeNewRow(rowId) {
@@ -21,14 +22,12 @@ function makeNewRow(rowId) {
   for (let index = 1; index < 6; index++) {
     let newCell = document.createElement("td");
     newCell.id = "." + String(index);
-    newCell.onclick = function() {
-      listener(newCell);
-    };
     document.getElementById(rowId).appendChild(newCell);
   }
 }
 
-function listener(newCell) {
+function listener(ev) {
+  let newCell = ev.target;
   if (newCell.innerHTML === "" && gameWon === false) {
     newCell.innerHTML = currentPlayer;
 
@@ -64,7 +63,7 @@ function startTimer(display) {
     document.getElementById("time").textContent = "0:" + timeString;
     if (--seconds < 0) {
       chancePlayer();
-      seconds = 9;
+      seconds = 10;
     }
   }, 1000);
 }

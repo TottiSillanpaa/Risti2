@@ -56,7 +56,7 @@ function listener(newCell) {
 }
 
 function startTimer(display) {
-  var seconds = 10;
+  var seconds = 9;
 
   tt = setInterval(function() {
     var timeString = seconds < 10 ? "0" + seconds : seconds;
@@ -64,7 +64,7 @@ function startTimer(display) {
     document.getElementById("time").textContent = "0:" + timeString;
     if (--seconds < 0) {
       chancePlayer();
-      seconds = 10;
+      seconds = 9;
     }
   }, 1000);
 }

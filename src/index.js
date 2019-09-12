@@ -32,6 +32,12 @@ function listener(newCell) {
   if (newCell.innerHTML === "" && gameWon === false) {
     newCell.innerHTML = currentPlayer;
 
+    var boo = checkWinner();
+    if (boo) {
+      gameWon = true;
+      alert("Player " + (currentPlayer === "X" ? "1" : "2") + " won!");
+    }
+
     /* Vaihdetaan klikatun solun tausta halutun värikseksi */
     if (currentPlayer === "X") {
       newCell.id = "X";
@@ -40,19 +46,12 @@ function listener(newCell) {
     }
     chancePlayer();
     clearInterval(tt);
-    startTimer();
-
-    /* Täytetään progress bar:ia */
-    procent += 4;
-    document.getElementById("progress").style.width = String(procent) + "%";
-
-    var boo = checkWinner();
-    if (boo) {
-      gameWon = true;
-      alert("Player " + (currentPlayer === "X" ? "1" : "2") + " won!");
+    if (!boo) {
+      startTimer();
     }
 
-    /*startTimer(10, timer);*/
+    procent += 4;
+    document.getElementById("progress").style.width = String(procent) + "%";
   }
 }
 
@@ -167,7 +166,9 @@ function checkWinner() {
   return false;
 }
 
-function newGameButton(tt) {
+function newGameButton() {
+  clearInterval(tt);
+  startTimer();
   gameWon = false;
   let cells = gameBoard.getElementsByTagName("td");
   for (let i = 0; i < cells.length; i++) {
@@ -175,10 +176,9 @@ function newGameButton(tt) {
     cells[i].id = undefined;
   }
   currentPlayer = "X";
-  clearInterval(tt);
-  startTimer();
   document.getElementById("progress").style.width = 0;
   document.getElementById("pp").innerHTML = "Pelaajan 1 vuoro";
+  procent = 0;
 }
 
 function chancePlayer() {
@@ -193,5 +193,5 @@ function chancePlayer() {
 
 fillBoard();
 document.getElementById("ng").onclick = function() {
-  newGameButton(tt);
+  newGameButton();
 };

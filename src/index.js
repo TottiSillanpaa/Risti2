@@ -1,21 +1,68 @@
 import "./styles.css";
 let currentPlayer = "X";
 let gameWon = false;
-let gameBoard = document.getElementById("board");
 let procent = 0;
 let tt;
 
 function fillBoard() {
+  makeHeader();
+  makeGameBoard();
+  makeProgressbar();
+  makeNewGameButton();
+
+  let time = document.createElement("div");
+  time.id = "time";
+  document.body.appendChild(time);
+
   makeNewRow("0");
   makeNewRow("1");
   makeNewRow("2");
   makeNewRow("3");
   makeNewRow("4");
   startTimer();
-  gameBoard.addEventListener("click", listener);
+  document.getElementById("board").addEventListener("click", listener);
+}
+
+function makeHeader() {
+  let head = document.createElement("div");
+  head.className = "head";
+
+  let text1 = document.createElement("h2");
+  text1.innerHTML = "Ristinolla";
+  let text2 = document.createElement("h3");
+  text2.id = "pp";
+  text2.innerHTML = "Pelaajan 1 vuoro";
+
+  head.appendChild(text1);
+  head.appendChild(text2);
+
+  document.body.appendChild(head);
+}
+
+function makeGameBoard() {
+  let div = document.createElement("div");
+  div.className = "table";
+
+  let board = document.createElement("grid");
+  board.id = "board";
+
+  div.appendChild(board);
+  document.body.appendChild(div);
+}
+
+function makeProgressbar() {
+  let div = document.createElement("div");
+  div.className = "bar";
+
+  let progress = document.createElement("div");
+  progress.id = "progress";
+
+  div.appendChild(progress);
+  document.body.appendChild(div);
 }
 
 function makeNewRow(rowId) {
+  let gameBoard = document.getElementById("board");
   let newRow = document.createElement("tr");
   newRow.id = rowId;
   gameBoard.appendChild(newRow);
@@ -24,6 +71,22 @@ function makeNewRow(rowId) {
     newCell.id = rowId + String(index);
     document.getElementById(rowId).appendChild(newCell);
   }
+}
+
+function makeNewGameButton() {
+  let div = document.createElement("div");
+  div.className = "wrapper";
+
+  let button = document.createElement("input");
+  button.type = "button";
+  button.value = "New Game";
+  button.id = "ng";
+  button.onclick = function() {
+    ngFunction();
+  };
+
+  div.appendChild(button);
+  document.body.appendChild(div);
 }
 
 function listener(ev) {
@@ -168,7 +231,8 @@ function checkWinner(cellRow, cellColumn) {
   }
 }
 
-function newGameButton() {
+function ngFunction() {
+  let gameBoard = document.getElementById("board");
   clearInterval(tt);
   startTimer();
   gameWon = false;
@@ -194,6 +258,3 @@ function chancePlayer() {
 }
 
 fillBoard();
-document.getElementById("ng").onclick = function() {
-  newGameButton();
-};

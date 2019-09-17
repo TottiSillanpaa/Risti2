@@ -31,7 +31,7 @@ td {
   width: 50%;
 }
 
-.progress {
+#progress {
   height: 15px;
   background-color: green;
   width: 0%;

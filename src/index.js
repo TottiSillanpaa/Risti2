@@ -11,6 +11,7 @@ function fillBoard() {
   makeNewRow("2");
   makeNewRow("3");
   makeNewRow("4");
+  makeNewRow("5");
   startTimer();
   gameBoard.addEventListener("click", listener);
 }

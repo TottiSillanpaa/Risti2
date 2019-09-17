@@ -2,17 +2,27 @@ body {
   font-family: sans-serif;
 }
 
-table {
-  border-collapse: collapse;
-  margin: 0 auto;
+.table {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-td {
-  table-layout: fixed;
+
+.grid-container {
+  display: inline-grid;
+  line-height: 60px;
+  grid-template-columns: auto auto auto auto auto;
+}
+
+.grid-item {
+  border: 1px solid black;
+  border-collapse: collapse;
   width: 60px;
   height: 60px;
-  border: 1px solid black;
-  text-align: center;
-  font: 30px helvetica;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 30px Helvetica;
 }
 
 .wrapper {
@@ -32,7 +42,7 @@ td {
 }
 
 #progress {
-  height: 15px;
+  width: 300px;
   background-color: green;
   width: 0%;
 }

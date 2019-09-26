@@ -39,11 +39,10 @@ function makeHeader() {
 
 function makeGameBoard() {
   let div = document.createElement("div");
-  div.className = "table";
+  div.className = "container";
 
   let board = document.createElement("div");
   board.id = "board";
-  board.className = "grid-container";
 
   div.appendChild(board);
   document.body.appendChild(div);
@@ -62,13 +61,17 @@ function makeProgressbar() {
 }
 
 function makeNewRows() {
-  for (let index = 0; index < 25; index++) {
-    let rowId = Math.floor(index / 5);
-    let rowColumn = index % 5;
-    let newCell = document.createElement("div");
-    newCell.className = "grid-item";
-    newCell.id = String(rowId) + String(rowColumn);
-    $("board").appendChild(newCell);
+  for (let i = 0; i < 5; i++) {
+    let newRow = document.createElement("div");
+    newRow.className = "row";
+    for (let index = 0; index < 5; index++) {
+      let newCell = document.createElement("div");
+      newCell.className = "col s1";
+      newCell.className += " grid-item";
+      newCell.id = String(i) + String(index);
+      newRow.appendChild(newCell);
+    }
+    $("board").appendChild(newRow);
   }
 }
 
@@ -231,10 +234,12 @@ function ngFunction() {
   clearInterval(tt);
   startTimer();
   gameWon = false;
-  let cells = $("board").getElementsByTagName("td");
-  for (let i = 0; i < cells.length; i++) {
-    cells[i].innerHTML = "";
-    cells[i].style.backgroundColor = "white";
+  for (let i = 0; i < 5; i++) {
+    for (let index = 0; index < 5; index++) {
+      let cell = $(String(i) + String(index));
+      cell.innerHTML = "";
+      cell.style.backgroundColor = "white";
+    }
   }
   currentPlayer = "X";
   $("progress").style.width = 0;
